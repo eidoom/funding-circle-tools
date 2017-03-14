@@ -1,0 +1,5 @@
+__pycache__/
+.idea/
+scrape_info.csv
+settings.cfg
+graph.pdf
