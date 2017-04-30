@@ -13,7 +13,7 @@ def log_in(config, verbose):
 
     if config.os_name == "Windows":
         chrome_driver_path = \
-            "{}\chromedriver.exe".format(config.chrome_driver_directory)
+            f"{config.chrome_driver_directory}\chromedriver.exe"
         driver = webdriver.Chrome(chrome_driver_path)
     else:
         driver = webdriver.Chrome()
@@ -31,15 +31,16 @@ def log_in(config, verbose):
     if verbose:
         print("  Logging into Funding Circle...")
 
-    username_field = driver.find_element_by_id("email")
+    username_field = driver.find_element_by_id("user_username")
     username_field.send_keys(config.username)
 
-    password_field = driver.find_element_by_id("password")
+    password_field = driver.find_element_by_id("user_password")
     password_field.send_keys(config.password)
 
     password_field.send_keys(Keys.RETURN)
 
-    # assert "Funding Circle" == driver.title
+    assert "Funding Circle - The Peer to Peer lending marketplace for small " \
+            "business loans" == driver.title
 
     security_question = driver.find_element_by_class_name(
         "input__label--above").text

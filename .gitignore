@@ -3,3 +3,4 @@ __pycache__/
 scrape_info.csv
 settings.cfg
 graph.pdf
+*.log
