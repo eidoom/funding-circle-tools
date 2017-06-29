@@ -22,9 +22,9 @@ def main():
     password = input("  Password: ")
     
     print("Now please input the answers to the security questions:")
-    school = input("  What school did you attend when you were 10 years old?")
-    friend = input("  What was the name of your best friend at school?")
-    where = input("  Where did you grow up?")
+    school = input("  What school did you attend when you were 10 years old? ")
+    friend = input("  What was the name of your best friend at school? ")
+    where = input("  Where did you grow up? ")
 
     chrome_driver_directory = input("Please input the full path to the chromedriver installation directory: ")
 
