@@ -9,6 +9,8 @@ Using chromedriver and Python 3 with Selenium and Matplotlib.
 
 * Install/check you have Python 3 installed along with packages Selenium and Matplotlib.
 
+* Download/clone this git repository.
+
 * Install chromedriver (https://sites.google.com/a/chromium.org/chromedriver/downloads) and take a note of installation directory.
 
 * Run generate_storage_files.py and follow instructions.
