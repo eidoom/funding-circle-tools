@@ -9,10 +9,10 @@ from matplotlib.pyplot import subplots, get_current_fig_manager, show
 from configuration import Configuration, QuietArgument, DATA_FILE
 
 
-def selector(config, when, input_values):
+def selector(config, when, input_values, days_to_show):
     latest_time = when[-1]
 
-    interval_time = timedelta(days=config.days_to_show)
+    interval_time = timedelta(days=days_to_show)
 
     search_start_time = latest_time - interval_time
 
@@ -29,7 +29,7 @@ def selector(config, when, input_values):
 
 
 def sub_plotter(config, ax, when, all_values, value_titles, plot_title,
-                y_label, reduced_time):
+                y_label, days_to_show=None):
     ax.yaxis.tick_right()
     ax.yaxis.set_label_position("right")
     ax.set_title(plot_title)
@@ -37,8 +37,8 @@ def sub_plotter(config, ax, when, all_values, value_titles, plot_title,
 
     for plot_title in value_titles:
         input_values = all_values[plot_title]
-        if reduced_time:
-            when2, input2 = selector(config, when, input_values)
+        if days_to_show:
+            when2, input2 = selector(config, when, input_values, days_to_show)
         else:
             when2 = when
             input2 = input_values
@@ -73,15 +73,20 @@ def generate_graph(config, data):
 
     sub_plotter(config, ax1, when, all_values,
                 ("net earnings", "earnings", "fees", "losses"),
-                "Earnings Overview", "£", False)
+                "Earnings Overview", "£")
     sub_plotter(config, ax2, when, all_values, ("net earnings",),
-                "Net Earnings", "£", True)
+                "Net Earnings", "£", config.days_to_show)
     sub_plotter(config, ax3, when, all_values,
                 ("annualised return", "gross yield", "estimated losses",
                  "returns fees", "estimated return"), "Returns Overview",
-                "%", False)
-    sub_plotter(config, ax4, when, all_values, ("annualised return",),
-                "Net Return", "%", True)
+                "%")
+    if config.show_available_funds:
+	    sub_plotter(config, ax4, when, all_values, ("available funds",),
+	                "Available Funds", "£", config.days_to_show_alt)
+    else:
+	    sub_plotter(config, ax4, when, all_values, ("annualised return",),
+	                "Net Return", "%", config.days_to_show)
+    
 
     fig.set_tight_layout("tight")
 

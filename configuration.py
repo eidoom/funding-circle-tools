@@ -15,11 +15,13 @@ class Configuration:
         self.os_name = operating_system()
         self.current_directory = path.dirname(path.realpath(__file__))
 
+        self.plot_available_funds = True
         self.show_available_funds = True
         self.show_figure = True
         self.save_figure = True
 
         self.days_to_show = 49
+        self.days_to_show_alt = 124
 
         config = ConfigParser()
         config.read(SETTINGS_FILE)
