@@ -18,7 +18,7 @@ class Configuration:
         self.plot_available_funds = True
         self.show_available_funds = True
         self.show_figure = True
-        self.save_figure = True
+        self.save_figure = False
 
         self.days_to_show = 49
         self.days_to_show_alt = 124
