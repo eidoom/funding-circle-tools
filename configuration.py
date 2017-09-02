@@ -15,7 +15,7 @@ class Configuration:
         self.os_name = operating_system()
         self.current_directory = path.dirname(path.realpath(__file__))
 
-        self.plot_available_funds = True
+        self.plot_available_funds = False
         self.show_available_funds = True
         self.show_figure = True
         self.save_figure = False

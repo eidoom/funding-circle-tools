@@ -80,7 +80,7 @@ def generate_graph(config, data):
                 ("annualised return", "gross yield", "estimated losses",
                  "returns fees", "estimated return"), "Returns Overview",
                 "%")
-    if config.show_available_funds:
+    if config.plot_available_funds:
 	    sub_plotter(config, ax4, when, all_values, ("available funds",),
 	                "Available Funds", "£", config.days_to_show_alt)
     else:
