@@ -11,7 +11,7 @@ Using chromedriver and Python 3 with Selenium and Matplotlib.
 
 * Download/clone this git repository.
 
-* Install chromedriver (https://sites.google.com/a/chromium.org/chromedriver/downloads) and take a note of installation directory.
+* Install chromedriver (https://sites.google.com/a/chromium.org/chromedriver/downloads) and: if on Windows, take a note of installation directory; otherwise, add chromedriver to PATH.
 
 * Run generate_storage_files.py and follow instructions.
 
