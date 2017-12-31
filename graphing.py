@@ -68,6 +68,8 @@ def generate_graph(config, data):
 
     if config.show_available_funds:
         print("  Available funds: £" + str(all_values["available funds"][-1]))
+        good_debt = round(100 * all_values["net earnings"][-1] / all_values["earnings"][-1], 1)
+        print("  Good debt: " + str(good_debt) + "%")
 
     fig, ((ax1, ax2), (ax3, ax4)) = subplots(2, 2)
 
@@ -81,12 +83,11 @@ def generate_graph(config, data):
                  "returns fees", "estimated return"), "Returns Overview",
                 "%")
     if config.plot_available_funds:
-	    sub_plotter(config, ax4, when, all_values, ("available funds",),
-	                "Available Funds", "£", config.days_to_show_alt)
+        sub_plotter(config, ax4, when, all_values, ("available funds",),
+                    "Available Funds", "£", config.days_to_show_alt)
     else:
-	    sub_plotter(config, ax4, when, all_values, ("annualised return",),
-	                "Net Return", "%", config.days_to_show)
-    
+        sub_plotter(config, ax4, when, all_values, ("annualised return",),
+                    "Net Return", "%", config.days_to_show)
 
     fig.set_tight_layout("tight")
 

@@ -14,8 +14,7 @@ def scrape_website(verbose, config):
 
     driver = log_in(config, verbose)
 
-    available_funds = \
-        driver.find_element_by_class_name("header__user-funds").text[17:]
+    available_funds = float("NaN")
 
     returns_summary = \
         driver.find_element_by_id("returns_summary").text.split("\n")

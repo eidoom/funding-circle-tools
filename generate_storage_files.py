@@ -12,7 +12,8 @@ def main():
     print("Generating files for storing settings and scraped data...")
 
     if isfile(SETTINGS_FILE) or isfile(DATA_FILE):
-        if input("Warning: will overwrite existing files - proceed?") not in ("y", "Y", "yes", "Yes"):
+        if input("Warning: will overwrite existing files - proceed?") not in \
+                ("y", "Y", "yes", "Yes"):
             exit()
 
     config = ConfigParser()
@@ -20,13 +21,14 @@ def main():
     print("Please input login details to populate settings file:")
     username = input("  Username: ")
     password = input("  Password: ")
-    
+
     print("Now please input the answers to the security questions:")
     school = input("  What school did you attend when you were 10 years old? ")
     friend = input("  What was the name of your best friend at school? ")
     where = input("  Where did you grow up? ")
 
-    chrome_driver_directory = input("Please input the full path to the chromedriver installation directory: ")
+    chrome_driver_directory = input(
+        "Please input the full path to the chromedriver installation directory: ")
 
     print("Generating settings file...")
 
