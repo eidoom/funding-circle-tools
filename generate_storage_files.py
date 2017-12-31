@@ -3,6 +3,7 @@
 
 from configparser import ConfigParser
 from os.path import isfile
+from platform import system as operating_system
 from sys import exit
 
 from configuration import SETTINGS_FILE, DATA_FILE
@@ -10,6 +11,7 @@ from configuration import SETTINGS_FILE, DATA_FILE
 
 def main():
     print("Generating files for storing settings and scraped data...")
+    os_name = operating_system()
 
     if isfile(SETTINGS_FILE) or isfile(DATA_FILE):
         if input("Warning: will overwrite existing files - proceed?") not in \
@@ -27,8 +29,11 @@ def main():
     friend = input("  What was the name of your best friend at school? ")
     where = input("  Where did you grow up? ")
 
-    chrome_driver_directory = input(
-        "Please input the full path to the chromedriver installation directory: ")
+    if os_name == "Windows":
+        chrome_driver_directory = input(
+            "Please input the full path to the chromedriver installation directory: ")
+    else:
+        chrome_driver_directory = ""
 
     print("Generating settings file...")
 
@@ -50,6 +55,7 @@ def main():
                         '"estimated return","earnings","fees","losses","net earnings"\n')
 
     print("Finished generating storage file.")
+
 
 if __name__ == "__main__":
     main()
