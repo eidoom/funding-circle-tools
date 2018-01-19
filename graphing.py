@@ -9,7 +9,7 @@ from matplotlib.pyplot import subplots, get_current_fig_manager, show
 from configuration import Configuration, QuietArgument, DATA_FILE
 
 
-def selector(config, when, input_values, days_to_show):
+def selector(when, input_values, days_to_show):
     latest_time = when[-1]
 
     interval_time = timedelta(days=days_to_show)
@@ -28,8 +28,8 @@ def selector(config, when, input_values, days_to_show):
     return reduced_when, reduced_values
 
 
-def sub_plotter(config, ax, when, all_values, value_titles, plot_title,
-                y_label, days_to_show=None):
+def sub_plotter(ax, when, all_values, value_titles, plot_title,
+                y_label, days_to_show=None, zoom=False, fixed=False):
     ax.yaxis.tick_right()
     ax.yaxis.set_label_position("right")
     ax.set_title(plot_title)
@@ -38,14 +38,21 @@ def sub_plotter(config, ax, when, all_values, value_titles, plot_title,
     for plot_title in value_titles:
         input_values = all_values[plot_title]
         if days_to_show:
-            when2, input2 = selector(config, when, input_values, days_to_show)
+            when2, input2 = selector(when, input_values, days_to_show)
         else:
             when2 = when
             input2 = input_values
         ax.plot(when2, input2, label=plot_title)
 
+    adjustment = 1  # %
+
+    if zoom:
+        range1 = all_values[value_titles[0]]
+        range2 = selector(when, range1, days_to_show)[1] if days_to_show else range1
+        ax.set_ylim(min(range2) * (1 - adjustment / 100), max(range2) * (1 + adjustment / 100))
+
     if len(value_titles) > 1:
-        ax.legend(loc="upper left")
+        ax.legend(loc="upper left" if fixed else "best")
 
 
 def generate_graph(config, data):
@@ -71,23 +78,43 @@ def generate_graph(config, data):
         good_debt = round(100 * all_values["net earnings"][-1] / all_values["earnings"][-1], 1)
         print("  Good debt: " + str(good_debt) + "%")
 
-    fig, ((ax1, ax2), (ax3, ax4)) = subplots(2, 2)
+    columns = 3 if config.middle_column else 2
+    last = columns - 1
+    fig, (axs_top, axs_bottom) = subplots(nrows=2, ncols=columns)
 
-    sub_plotter(config, ax1, when, all_values,
-                ("net earnings", "earnings", "fees", "losses"),
-                "Earnings Overview", "£")
-    sub_plotter(config, ax2, when, all_values, ("net earnings",),
-                "Net Earnings", "£", config.days_to_show)
-    sub_plotter(config, ax3, when, all_values,
-                ("annualised return", "gross yield", "estimated losses",
-                 "returns fees", "estimated return"), "Returns Overview",
-                "%")
+    pound_label = "£"
+    percentage_label = "%"
+
+    top_value_labels = ("net earnings", "earnings", "fees", "losses")
+    top_plot_title = "Earnings Overview"
+
+    sub_plotter(axs_top[0], when, all_values, top_value_labels, f"{top_plot_title} - all time",
+                pound_label, fixed=True)
+    if config.middle_column:
+        sub_plotter(axs_top[1], when, all_values, top_value_labels,
+                    f"{top_plot_title} - last {config.middle_label}", pound_label,
+                    config.middle_period, zoom=True)
+    sub_plotter(axs_top[last], when, all_values, ("net earnings",),
+                f"Net Earnings - last {config.end_label}", pound_label,
+                config.end_period)
+
+    bottom_value_labels = ("annualised return", "gross yield", "estimated losses",
+                           "returns fees", "estimated return")
+    bottom_plot_title = "Returns Overview"
+
+    sub_plotter(axs_bottom[0], when, all_values, bottom_value_labels, bottom_plot_title,
+                percentage_label, fixed=True)
+    if config.middle_column:
+        sub_plotter(axs_bottom[1], when, all_values, bottom_value_labels,
+                    f"{bottom_plot_title} - last {config.middle_label}", percentage_label,
+                    config.middle_period, zoom=True)
     if config.plot_available_funds:
-        sub_plotter(config, ax4, when, all_values, ("available funds",),
-                    "Available Funds", "£", config.days_to_show_alt)
+        sub_plotter(axs_bottom[last], when, all_values, ("available funds",),
+                    "Available Funds", pound_label, config.end_period)
     else:
-        sub_plotter(config, ax4, when, all_values, ("annualised return",),
-                    "Net Return", "%", config.days_to_show)
+        sub_plotter(axs_bottom[last], when, all_values, ("annualised return",),
+                    f"Net Return - last {config.end_label}", percentage_label,
+                    config.end_period)
 
     fig.set_tight_layout("tight")
 

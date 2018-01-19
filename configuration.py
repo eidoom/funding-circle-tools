@@ -20,8 +20,18 @@ class Configuration:
         self.show_figure = True
         self.save_figure = False
 
-        self.days_to_show = 49
-        self.days_to_show_alt = 124
+        year = 365.25
+        month = year / 12
+
+        self.middle_column = True
+
+        middle_months = 12
+        self.middle_period = middle_months * month
+        self.middle_label = "year" if middle_months == 12 else f"{middle_months} months"
+
+        end_months = 3
+        self.end_period = end_months * month
+        self.end_label = f"{end_months} months"
 
         config = ConfigParser()
         config.read(SETTINGS_FILE)
