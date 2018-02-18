@@ -30,6 +30,50 @@ def selector(when, input_values, days_to_show):
     return reduced_when, reduced_values
 
 
+def time_handler(when2, extrapolation_months):
+    extrapolation_days = int(extrapolation_months * 365.25 / 12)
+
+    extra = when2[-1] + timedelta(days=extrapolation_days)
+    when2_datetime_ext = when2 + [extra]
+    when2_posix = [int(mktime(a.timetuple())) for a in when2]
+    when2_posix_ext = when2_posix + [int(mktime(extra.timetuple()))]
+
+    return when2_datetime_ext, when2_posix, when2_posix_ext
+
+
+def fitter(ax, when, input_values, order=1, months_to_fit=None, plot_title=""):
+    mod0 = " " if plot_title else ""
+
+    if months_to_fit:
+        days_to_fit = int(months_to_fit * 365.25 / 12)
+        when2, input2 = selector(when, input_values, days_to_fit)
+        fit_time = f"last {months_to_fit} months"
+    else:
+        when2 = when
+        input2 = input_values
+        fit_time = "all time"
+
+    when2_datetime_ext, when2_posix, when2_posix_ext = time_handler(when2, 6)
+
+    if order == 1:
+        order_adjective = "linear"
+        c11, c10 = polyfit(when2_posix, input2, 1)
+        fit = [c11 * x + c10 for x in when2_posix_ext]
+    elif order == 2:
+        order_adjective = "quadratic"
+        c22, c21, c20 = polyfit(when2_posix, input2, 2)
+        fit = [c22 * x ** 2 + c21 * x + c20 for x in when2_posix_ext]
+    elif order == 3:
+        order_adjective = "cubic"
+        c33, c32, c31, c30 = polyfit(when2_posix, input2, 3)
+        fit = [c33 * x ** 3 + c32 * x ** 2 + c31 * x + c30 for x in when2_posix_ext]
+    else:
+        exit(f"No support for order {order}")
+
+    ax.plot(when2_datetime_ext, fit, '-',
+            label=f"{plot_title}{mod0}{order_adjective} fit over {fit_time}")
+
+
 def sub_plotter(ax, when, all_values, value_titles, plot_title,
                 y_label, days_to_show=None, zoom=False, fixed=False):
     ax.yaxis.tick_right()
@@ -46,13 +90,12 @@ def sub_plotter(ax, when, all_values, value_titles, plot_title,
             input2 = input_values
         ax.plot(when2, input2, '.', label=plot_title)
 
-        when3 = [int(mktime(a.timetuple())) for a in when2]
+        fitter(ax, when2, input2)
+        # fitter(ax, when2, input2, order=2)
+        # fitter(ax, when2, input2, order=3)
+        fitter(ax, when2, input2, months_to_fit=12)
+        fitter(ax, when2, input2, months_to_fit=6)
 
-        m, c = polyfit(when3, input2, 1)
-
-        input3 = [m * x + c for x in when3]
-
-        ax.plot(when2, input3, '-', label=f"{plot_title} fit")
 
     adjustment = 1  # %
 
@@ -61,8 +104,7 @@ def sub_plotter(ax, when, all_values, value_titles, plot_title,
         range2 = selector(when, range1, days_to_show)[1] if days_to_show else range1
         ax.set_ylim(min(range2) * (1 - adjustment / 100), max(range2) * (1 + adjustment / 100))
 
-    if len(value_titles) > 1:
-        ax.legend(loc="upper left" if fixed else "best")
+    ax.legend(loc="upper left" if fixed else "best")
 
 
 def generate_graph(config, data):
@@ -83,23 +125,23 @@ def generate_graph(config, data):
 
     all_values["returns fees"] = [1] * len(when)
 
-    fig, (ax_top, ax_bottom) = subplots(nrows=2, ncols=1)
+    # fig, (ax_top, ax_bottom) = subplots(nrows=2, ncols=1)
+    fig, ax_bottom = subplots(nrows=1, ncols=1)
 
     pound_label = "£"
     percentage_label = "%"
 
-    top_value_labels = ("net earnings", "earnings", "fees", "losses")
-    top_plot_title = "Earnings Overview"
+    # top_value_labels = ("net earnings", "losses")
+    # top_plot_title = "Earnings Overview"
+    #
+    # sub_plotter(ax_top, when, all_values, top_value_labels, f"{top_plot_title} - all time",
+    #             pound_label, fixed=True)
 
-    sub_plotter(ax_top, when, all_values, top_value_labels, f"{top_plot_title} - all time",
-                pound_label, fixed=True)
-
-    bottom_value_labels = ("annualised return", "gross yield", "estimated losses",
-                           "returns fees", "estimated return")
+    bottom_value_labels = ("annualised return",)
     bottom_plot_title = "Returns Overview"
 
     sub_plotter(ax_bottom, when, all_values, bottom_value_labels, bottom_plot_title,
-                percentage_label, fixed=True)
+                percentage_label)
 
     fig.set_tight_layout("tight")
 
