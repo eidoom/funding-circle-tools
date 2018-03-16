@@ -31,10 +31,10 @@ def log_in(config, verbose):
     if verbose:
         print("  Logging into Funding Circle...")
 
-    username_field = driver.find_element_by_id("user_username")
+    username_field = driver.find_element_by_xpath("//input[@id='user_username']")
     username_field.send_keys(config.username)
 
-    password_field = driver.find_element_by_id("user_password")
+    password_field = driver.find_element_by_xpath("//input[@id='user_password']")
     password_field.send_keys(config.password)
 
     password_field.send_keys(Keys.RETURN)
