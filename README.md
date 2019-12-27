@@ -5,6 +5,7 @@ Tested on Fedora 31.
 ## Dependancies
 
 * Pandas `sudo dnf install python3-pandas`
+* matplotlib `sudo dnf install python3-matplotlib`
 
 ## Usage
 
