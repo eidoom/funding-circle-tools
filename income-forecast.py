@@ -10,8 +10,12 @@ if __name__ == "__main__":
     parser.add_argument("filename", type=str, help="Name of income forecast CSV file")
     args = parser.parse_args()
     data = pandas.read_csv(args.filename)
-    due_date = data["due_date"]
-    pay_principal = data["pay_principal"]
+    data["profit"] = data["pay_interest"] - data["lender_fee"]
+    data["income"] = data["pay_principal"] + data["profit"]
+    data["profit_cumulative"] = data["profit"].cumsum()
+    data["income_cumulative"] = data["income"].cumsum()
 
-    plt.scatter(due_date, pay_principal)
-    plt.show()
+    print(data["due_date"][0])
+
+    # plt.scatter(data["due_date"], data["income_cumulative"])
+    # plt.show()
