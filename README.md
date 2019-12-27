@@ -1,30 +1,15 @@
-# Funding Circle Tools
+# Funding Circle tools
 
-Scripts to scrape information from Funding Circle and plot the data. 
-(Also some scripts to automate login and navigation to desired pages.)
+Tested on Fedora 31.
 
-Using chromedriver and Python 3 with Selenium and Matplotlib.
+## Dependancies
 
-### Installation instructions ###
+* Pandas `sudo dnf install python3-pandas`
 
-* Install/check you have Python 3.6+ installed along with packages Selenium and Matplotlib.
+## Usage
 
-* Download/clone this git repository.
+* `income-forecase.py CSV_FILE` graphs income forecast - WIP
 
-* Install [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads).
-  * If you're on Windows, take a note of the installation directory.
-  * Otherwise, add chromedriver to PATH.
+## `old`
 
-* Run generate_storage_files.py and follow the instructions.
-
-### Usage instructions ###
-
-* Run tracking.py to scrape information from Funding Circle website.
-
-* Run graphing.py to generate an interactive plot of scraped data (also saves a picture to graph.pdf).
-
-### Troubleshooting ###
-
-* If you encounter an error, please **make sure you are using the latest version of [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)**.
-
-* If that doesn't fix it, let me know by logging the issue on Github.
+* These are the legacy tools, which no longer work on the current website
