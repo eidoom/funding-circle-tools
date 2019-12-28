@@ -10,10 +10,14 @@ class Visualiser:
     def __init__(self):
         self.loans = get_data()
         self.loans["Unique title"] = [
-            "".join([i for i in title if i != "-" and not i.isdigit()])
-            .rstrip()
-            .capitalize()
+            "".join([i for i in title if i != "-" and not i.isdigit()]).rstrip().lower()
             for title in self.loans["Loan title"]
+        ]
+        self.loans["Unique title"] = [
+            a[:-5]
+            if (a[-5:] == " loan" and a[:-5] in self.loans["Unique title"].values)
+            else a
+            for a in self.loans["Unique title"]
         ]
         self.live_loans = self.loans[
             self.loans["Loan status"].isin(["Live", "Late", "Processing"])
@@ -65,9 +69,9 @@ class Visualiser:
 
 if __name__ == "__main__":
     vis = Visualiser()
-    vis.pie_chart("live_loans", "Sector", "Sector distribution of live loans")
-    vis.pie_chart("loans", "Loan status", "Loan status distribution")
-    vis.risk_distribution_pie()
+    # vis.pie_chart("live_loans", "Sector", "Sector distribution of live loans")
+    # vis.pie_chart("loans", "Loan status", "Loan status distribution")
+    # vis.risk_distribution_pie()
     vis.titles_cloud()
 
     show()
