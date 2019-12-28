@@ -6,6 +6,7 @@ Tested on Fedora 31.
 
 * Pandas `sudo dnf install python3-pandas`
 * matplotlib `sudo dnf install python3-matplotlib`
+* wordcloud `pip install --user wordcloud`
 
 ## Usage
 
