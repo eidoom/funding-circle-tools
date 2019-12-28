@@ -9,7 +9,8 @@ Tested on Fedora 31.
 
 ## Usage
 
-* `./income-forecase.py CSV_FILE` graphs income forecast from `My Portfolio > My Loan Parts > Dwnload repayment schedule`
+* `./income-forecase.py CSV_FILE` graphs income forecast from [`My Portfolio > My Loan Parts > Dwnload repayment schedule`](https://www.fundingcircle.com/investors/portfolio)
+* `./all-loan.py CSV_FILE` shows various statistics about loans from [`My Portfolio > My Loan Parts > Download all loans`](https://www.fundingcircle.com/investors/portfolio)
 
 ## `old`
 

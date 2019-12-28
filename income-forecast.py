@@ -2,17 +2,13 @@
 
 from datetime import datetime
 
-import pandas as pd
 import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
-from argparse import ArgumentParser
 
+from lib import get_data
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("filename", type=str, help="Name of income forecast CSV file")
-    args = parser.parse_args()
-    data = pd.read_csv(args.filename)
+    data = get_data()
 
     data["due_date"] = [datetime.strptime(a, "%Y-%m-%d") for a in data["due_date"]]
     data = data.sort_values(by=["due_date", "loan_part_id"])
