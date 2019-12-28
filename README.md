@@ -9,7 +9,7 @@ Tested on Fedora 31.
 
 ## Usage
 
-* `./income-forecase.py CSV_FILE` graphs income forecast - WIP
+* `./income-forecase.py CSV_FILE` graphs income forecast from `My Portfolio > My Loan Parts > Dwnload repayment schedule`
 
 ## `old`
 
